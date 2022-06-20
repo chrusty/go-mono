@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// An implementation of the Analyser interface, using the go/build package (no shelling out):
 type Analyser struct {
 	rootDir    string
 	rootModule string

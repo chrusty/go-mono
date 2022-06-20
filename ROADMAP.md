@@ -18,6 +18,8 @@ v0.1
 v0.2
 ----
 
+- [x] Remame the "packages" package to "analyser"
+- [ ] Bring comparison logic into the analyser
 - [ ] Stop shelling out to GIT, and implement a Gitter using a GIT library
 
 

@@ -5,8 +5,8 @@ import (
 	"os"
 	"path"
 
+	"github.com/chrusty/go-mono/internal/analyser/build"
 	"github.com/chrusty/go-mono/internal/git/shell"
-	"github.com/chrusty/go-mono/internal/packages/build"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,13 +18,12 @@ var (
 	trace         = flag.Bool("trace", false, "Run in trace mode?")
 )
 
+const (
+	version = "0.2.0"
+)
+
 func init() {
 	flag.Parse()
-	logrus.WithField("debug", *debug).Debug("Flag")
-	logrus.WithField("diff", *compareCommit).Debug("Flag")
-	logrus.WithField("package", *buildPackage).Debug("Flag")
-	logrus.WithField("repo", *repoRoot).Debug("Flag")
-	logrus.WithField("trace", *repoRoot).Debug("Flag")
 
 	// Enable debug logging:
 	if *debug {
@@ -38,6 +37,14 @@ func init() {
 
 	// Disable timestamps:
 	logrus.SetFormatter(&logrus.TextFormatter{DisableTimestamp: true})
+
+	// Report config:
+	logrus.WithField("debug", *debug).Debug("Flag")
+	logrus.WithField("diff", *compareCommit).Debug("Flag")
+	logrus.WithField("package", *buildPackage).Debug("Flag")
+	logrus.WithField("repo", *repoRoot).Debug("Flag")
+	logrus.WithField("trace", *trace).Debug("Flag")
+	logrus.WithField("version", version).Debug("go-mono")
 }
 
 func main() {
