@@ -57,15 +57,14 @@ func main() {
 		logrus.WithField("filename", changedFile).Debug("Changed file")
 	}
 
-	// Get the root module name:
-	rootModule, err := build.GetModule(*repoRoot)
+	// Prepare a package analyser:
+	analyser, err := build.New(*repoRoot)
 	if err != nil {
-		logrus.WithError(err).Fatalf("Unable to find the root module name")
+		logrus.WithError(err).Fatalf("Unable to prepare a package analyser")
 	}
-	logrus.WithField("root_module", rootModule).Info("Read root module name")
 
 	// Get a list of imported packages:
-	importedPackages, err := build.GetPackages(rootModule, *buildPackage)
+	importedPackages, err := analyser.GetPackages(*buildPackage)
 	if err != nil {
 		logrus.WithError(err).Fatal("Unable to find imported packages")
 	}
