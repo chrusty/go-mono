@@ -33,6 +33,7 @@ func New(repoRootDirectory string) (*Gitter, error) {
 
 // Get a list of files which differ from the given commit/tag/branch:
 func (g *Gitter) Diff(commit string) ([]string, error) {
+	var changedFiles = []string{}
 
 	// Make a GIT command (git diff <commit> --name-only):
 	cmd := exec.Command("git", "diff", commit, "--name-only")
@@ -44,6 +45,12 @@ func (g *Gitter) Diff(commit string) ([]string, error) {
 	}
 
 	// Split up the output and return the list of changed files:
-	changedFiles := strings.Split(string(output), "\n")
+	splitOutputLines := strings.Split(string(output), "\n")
+	for _, splitOutputLine := range splitOutputLines {
+		if len(splitOutputLine) > 0 {
+			changedFiles = append(changedFiles, splitOutputLine)
+		}
+	}
+
 	return changedFiles, nil
 }
