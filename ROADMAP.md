@@ -10,7 +10,15 @@ v0.1
 - [x] Build a list of changed files
 - [x] Figure out the root module name
 - [x] Recursively analyse package dependencies and build a list
-- [ ] Return non-zero error code if any of the given paths need to be built
+- [x] Return non-zero error code if any of the given paths need to be built
+- [x] Read GIT repo from any (external) directory
+- [x] Analyse packages from any (external) directory
+
+
+v0.2
+----
+
+- [ ] Stop shelling out to GIT, and implement a Gitter using a GIT library
 
 
 Backlog

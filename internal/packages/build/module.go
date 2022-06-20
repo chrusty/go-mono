@@ -8,11 +8,11 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-func GetModule(repoRoot string) (string, error) {
+func (a *Analyser) GetModule() (string, error) {
 	var modUndefined = "undefined"
 
 	// Open go.mod:
-	goModFilename := fmt.Sprintf("%s/go.mod", repoRoot)
+	goModFilename := fmt.Sprintf("%s/go.mod", a.rootDir)
 	goModFileContents, err := ioutil.ReadFile(goModFilename)
 	if err != nil {
 		return modUndefined, fmt.Errorf("Unable to open go.mod: %w", err)
@@ -22,7 +22,7 @@ func GetModule(repoRoot string) (string, error) {
 	// Use it to inspect the root module:
 	goMod, err := modfile.Parse(goModFilename, goModFileContents, nil)
 	if err != nil {
-		return modUndefined, fmt.Errorf("Unable to analyse repo root package in %s: %w", repoRoot, err)
+		return modUndefined, fmt.Errorf("Unable to analyse repo root package in %s: %w", a.rootDir, err)
 	}
 
 	return goMod.Module.Mod.String(), nil
