@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"os"
-	"path"
 
 	"github.com/chrusty/go-mono/internal/analyser/build"
 	"github.com/chrusty/go-mono/internal/git/shell"
@@ -48,7 +47,6 @@ func init() {
 }
 
 func main() {
-	var changesDetected bool
 
 	// Get a Gitter:
 	gitter, err := shell.New(*repoRoot)
@@ -74,17 +72,8 @@ func main() {
 		logrus.WithError(err).Fatal("Unable to find imported packages")
 	}
 
-	// Report on the imports we found:
-	for importedPackage, relativeImport := range importedPackages {
-
-		// Compare to changed files:
-		for _, changedFile := range changedFiles {
-			if path.Dir(changedFile) == relativeImport {
-				logrus.WithField("package", importedPackage).Warn("Import has changed")
-				changesDetected = true
-			}
-		}
-	}
+	// Analyse the changes:
+	changesDetected := analyser.AnalyseChanges(changedFiles, importedPackages)
 
 	// If we've found any changes then return a non-zero code:
 	if changesDetected {

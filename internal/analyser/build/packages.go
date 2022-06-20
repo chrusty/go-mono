@@ -5,11 +5,12 @@ import (
 	"go/build"
 	"strings"
 
+	"github.com/chrusty/go-mono/internal/analyser"
 	"github.com/sirupsen/logrus"
 )
 
 // GetPackages find all local packages under a directory:
-func (a *Analyser) GetPackages(buildPackage string) (map[string]string, error) {
+func (a *Analyser) GetPackages(buildPackage string) (analyser.ImportedPackages, error) {
 
 	// Keep packages in here:
 	packages := make(map[string]string)
