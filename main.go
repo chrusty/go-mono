@@ -13,7 +13,7 @@ import (
 var (
 	debug         = flag.Bool("debug", false, "Run in debug mode?")
 	compareCommit = flag.String("diff", "main", "Name of the branch / tag / commit to compare to")
-	buildPackage  = flag.String("package", ".", "Path to the package to analyse")
+	buildPackage  = flag.String("package", ".", "Path to the package to analyse (relative to the repo)")
 	repoRoot      = flag.String("repo", ".", "Path to the root of the GIT repo")
 	trace         = flag.Bool("trace", false, "Run in trace mode?")
 )

@@ -12,7 +12,7 @@ v0.1
 - [x] Recursively analyse package dependencies and build a list
 - [x] Return non-zero error code if any of the given paths need to be built
 - [x] Read GIT repo from any (external) directory
-- [ ] Analyse packages from any (external) directory
+- [x] Analyse packages from any (external) directory
 
 
 v0.2
