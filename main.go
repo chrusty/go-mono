@@ -35,6 +35,9 @@ func init() {
 	if *trace {
 		logrus.SetLevel(logrus.TraceLevel)
 	}
+
+	// Disable timestamps:
+	logrus.SetFormatter(&logrus.TextFormatter{DisableTimestamp: true})
 }
 
 func main() {
@@ -52,11 +55,6 @@ func main() {
 		logrus.WithError(err).WithField("repo", *repoRoot).WithField("diff", *compareCommit).Fatalf("Unable to list changed files")
 	}
 
-	// Report changed files:
-	for _, changedFile := range changedFiles {
-		logrus.WithField("filename", changedFile).Debug("Changed file")
-	}
-
 	// Prepare a package analyser:
 	analyser, err := build.New(*repoRoot)
 	if err != nil {
@@ -71,7 +69,6 @@ func main() {
 
 	// Report on the imports we found:
 	for importedPackage, relativeImport := range importedPackages {
-		logrus.WithField("package", importedPackage).WithField("relative_import", relativeImport).Debug("Import")
 
 		// Compare to changed files:
 		for _, changedFile := range changedFiles {

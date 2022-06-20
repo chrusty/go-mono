@@ -31,6 +31,7 @@ func (a *Analyser) GetPackages(buildPackage string) (map[string]string, error) {
 			// Figure out the relative path to the imported package:
 			relativePackagePath := strings.Replace(importedPackage, a.rootModule, "", -1)[1:]
 			packages[importedPackage] = relativePackagePath
+			logrus.WithField("package", importedPackage).WithField("relative_import", relativePackagePath).Trace("Monorepo import found")
 
 			// Recurse:
 			logrus.Tracef("Recursing %s", relativePackagePath)
