@@ -59,6 +59,7 @@ func main() {
 	if err != nil {
 		logrus.WithError(err).Fatalf("Unable to find the root module name")
 	}
+	logrus.WithField("root_module", rootModule).Info("Read root module name")
 
 	// Get a list of imported packages:
 	importedPackages, err := build.GetPackages(rootModule, *buildPackage)

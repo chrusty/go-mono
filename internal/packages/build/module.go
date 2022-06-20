@@ -2,8 +2,9 @@ package build
 
 import (
 	"fmt"
-	"os"
+	"io/ioutil"
 
+	"github.com/sirupsen/logrus"
 	"golang.org/x/mod/modfile"
 )
 
@@ -12,16 +13,11 @@ func GetModule(repoRoot string) (string, error) {
 
 	// Open go.mod:
 	goModFilename := fmt.Sprintf("%s/go.mod", repoRoot)
-	goModFile, err := os.Open(goModFilename)
+	goModFileContents, err := ioutil.ReadFile(goModFilename)
 	if err != nil {
 		return modUndefined, fmt.Errorf("Unable to open go.mod: %w", err)
 	}
-
-	// Read it:
-	var goModFileContents []byte
-	if _, err := goModFile.Read(goModFileContents); err != nil {
-		return modUndefined, fmt.Errorf("Unable to read go.mod: %w", err)
-	}
+	logrus.Tracef("Read %d bytes from %s", len(goModFileContents), goModFilename)
 
 	// Use it to inspect the root module:
 	goMod, err := modfile.Parse(goModFilename, goModFileContents, nil)
@@ -30,5 +26,4 @@ func GetModule(repoRoot string) (string, error) {
 	}
 
 	return goMod.Module.Mod.String(), nil
-
 }
