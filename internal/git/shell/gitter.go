@@ -36,7 +36,7 @@ func (g *Gitter) Diff(commit string) ([]string, error) {
 	var changedFiles = []string{}
 
 	// Make a GIT command (git diff <commit> --name-only):
-	cmd := exec.Command("git", "diff", commit, "--name-only")
+	cmd := exec.Command("git", "-C", g.repoRootDirectory, "diff", commit, "--name-only")
 
 	// Get the stdout:
 	output, err := cmd.Output()
