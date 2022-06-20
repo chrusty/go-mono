@@ -3,10 +3,9 @@ package main
 import (
 	"flag"
 	"os"
-	"path"
 
+	"github.com/chrusty/go-mono/internal/analyser/build"
 	"github.com/chrusty/go-mono/internal/git/shell"
-	"github.com/chrusty/go-mono/internal/packages/build"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,13 +17,12 @@ var (
 	trace         = flag.Bool("trace", false, "Run in trace mode?")
 )
 
+const (
+	version = "0.2.0"
+)
+
 func init() {
 	flag.Parse()
-	logrus.WithField("debug", *debug).Debug("Flag")
-	logrus.WithField("diff", *compareCommit).Debug("Flag")
-	logrus.WithField("package", *buildPackage).Debug("Flag")
-	logrus.WithField("repo", *repoRoot).Debug("Flag")
-	logrus.WithField("trace", *repoRoot).Debug("Flag")
 
 	// Enable debug logging:
 	if *debug {
@@ -35,10 +33,20 @@ func init() {
 	if *trace {
 		logrus.SetLevel(logrus.TraceLevel)
 	}
+
+	// Disable timestamps:
+	logrus.SetFormatter(&logrus.TextFormatter{DisableTimestamp: true})
+
+	// Report config:
+	logrus.WithField("debug", *debug).Debug("Flag")
+	logrus.WithField("diff", *compareCommit).Debug("Flag")
+	logrus.WithField("package", *buildPackage).Debug("Flag")
+	logrus.WithField("repo", *repoRoot).Debug("Flag")
+	logrus.WithField("trace", *trace).Debug("Flag")
+	logrus.WithField("version", version).Debug("go-mono")
 }
 
 func main() {
-	var changesDetected bool
 
 	// Get a Gitter:
 	gitter, err := shell.New(*repoRoot)
@@ -50,11 +58,6 @@ func main() {
 	changedFiles, err := gitter.Diff(*compareCommit)
 	if err != nil {
 		logrus.WithError(err).WithField("repo", *repoRoot).WithField("diff", *compareCommit).Fatalf("Unable to list changed files")
-	}
-
-	// Report changed files:
-	for _, changedFile := range changedFiles {
-		logrus.WithField("filename", changedFile).Debug("Changed file")
 	}
 
 	// Prepare a package analyser:
@@ -69,18 +72,8 @@ func main() {
 		logrus.WithError(err).Fatal("Unable to find imported packages")
 	}
 
-	// Report on the imports we found:
-	for importedPackage, relativeImport := range importedPackages {
-		logrus.WithField("package", importedPackage).WithField("relative_import", relativeImport).Debug("Import")
-
-		// Compare to changed files:
-		for _, changedFile := range changedFiles {
-			if path.Dir(changedFile) == relativeImport {
-				logrus.WithField("package", importedPackage).Warn("Import has changed")
-				changesDetected = true
-			}
-		}
-	}
+	// Analyse the changes:
+	changesDetected := analyser.AnalyseChanges(changedFiles, importedPackages)
 
 	// If we've found any changes then return a non-zero code:
 	if changesDetected {

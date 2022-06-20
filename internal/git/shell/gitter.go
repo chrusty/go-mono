@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 type Gitter struct {
@@ -48,6 +50,7 @@ func (g *Gitter) Diff(commit string) ([]string, error) {
 	splitOutputLines := strings.Split(string(output), "\n")
 	for _, splitOutputLine := range splitOutputLines {
 		if len(splitOutputLine) > 0 {
+			logrus.WithField("filename", splitOutputLine).Debug("Changed file detected")
 			changedFiles = append(changedFiles, splitOutputLine)
 		}
 	}

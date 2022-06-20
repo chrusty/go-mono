@@ -5,11 +5,12 @@ import (
 	"go/build"
 	"strings"
 
+	"github.com/chrusty/go-mono/internal/analyser"
 	"github.com/sirupsen/logrus"
 )
 
 // GetPackages find all local packages under a directory:
-func (a *Analyser) GetPackages(buildPackage string) (map[string]string, error) {
+func (a *Analyser) GetPackages(buildPackage string) (analyser.ImportedPackages, error) {
 
 	// Keep packages in here:
 	packages := make(map[string]string)
@@ -31,6 +32,7 @@ func (a *Analyser) GetPackages(buildPackage string) (map[string]string, error) {
 			// Figure out the relative path to the imported package:
 			relativePackagePath := strings.Replace(importedPackage, a.rootModule, "", -1)[1:]
 			packages[importedPackage] = relativePackagePath
+			logrus.WithField("package", importedPackage).WithField("relative_import", relativePackagePath).Trace("Monorepo import found")
 
 			// Recurse:
 			logrus.Tracef("Recursing %s", relativePackagePath)

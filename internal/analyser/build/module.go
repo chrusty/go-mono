@@ -8,7 +8,7 @@ import (
 	"golang.org/x/mod/modfile"
 )
 
-func (a *Analyser) GetModule() (string, error) {
+func (a *Analyser) GetRootModule() (string, error) {
 	var modUndefined = "undefined"
 
 	// Open go.mod:
@@ -25,5 +25,6 @@ func (a *Analyser) GetModule() (string, error) {
 		return modUndefined, fmt.Errorf("Unable to analyse repo root package in %s: %w", a.rootDir, err)
 	}
 
+	logrus.WithField("root_module", goMod.Module.Mod.String()).Debug("Read root module name")
 	return goMod.Module.Mod.String(), nil
 }

@@ -2,10 +2,9 @@ package build
 
 import (
 	"fmt"
-
-	"github.com/sirupsen/logrus"
 )
 
+// An implementation of the Analyser interface, using the go/build package (no shelling out):
 type Analyser struct {
 	rootDir    string
 	rootModule string
@@ -20,14 +19,13 @@ func New(rootDir string) (*Analyser, error) {
 	}
 
 	// Attempt to get the root module:
-	rootModule, err := analyser.GetModule()
+	rootModule, err := analyser.GetRootModule()
 	if err != nil {
 		return nil, err
 	}
 
 	// Return a configured analyser:
 	analyser.rootModule = rootModule
-	logrus.WithField("root_module", analyser.rootModule).Info("Read root module name")
 	return analyser, nil
 }
 
