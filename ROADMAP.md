@@ -8,7 +8,7 @@ v0.1
     - [x] Binary package to base dependency tree on
     - [x] GIT branch / commit to diff against
 - [x] Build a list of changed files
-- [ ] Figure out the root module name
+- [x] Figure out the root module name
 - [x] Recursively analyse package dependencies and build a list
 - [ ] Return non-zero error code if any of the given paths need to be built
 
