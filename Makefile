@@ -1,5 +1,5 @@
 test:
-	@go test ./...
+	@go test ./... -cover
 
 build:
 	@mkdir -p bin
