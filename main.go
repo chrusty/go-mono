@@ -5,13 +5,13 @@ import (
 	"os"
 
 	"github.com/chrusty/go-mono/internal/analyser/build"
-	"github.com/chrusty/go-mono/internal/git/shell"
+	gogit "github.com/chrusty/go-mono/internal/git/go-git"
 	"github.com/sirupsen/logrus"
 )
 
 var (
+	compareBranch = flag.String("branch", "main", "Name of the branch to compare to")
 	debug         = flag.Bool("debug", false, "Run in debug mode?")
-	compareCommit = flag.String("diff", "main", "Name of the branch / tag / commit to compare to")
 	buildPackage  = flag.String("package", ".", "Path to the package to analyse (relative to the repo)")
 	repoRoot      = flag.String("repo", ".", "Path to the root of the GIT repo")
 	trace         = flag.Bool("trace", false, "Run in trace mode?")
@@ -39,7 +39,7 @@ func init() {
 
 	// Report config:
 	logrus.WithField("debug", *debug).Debug("Flag")
-	logrus.WithField("diff", *compareCommit).Debug("Flag")
+	logrus.WithField("branch", *compareBranch).Debug("Flag")
 	logrus.WithField("package", *buildPackage).Debug("Flag")
 	logrus.WithField("repo", *repoRoot).Debug("Flag")
 	logrus.WithField("trace", *trace).Debug("Flag")
@@ -49,15 +49,15 @@ func init() {
 func main() {
 
 	// Get a Gitter:
-	gitter, err := shell.New(*repoRoot)
+	gitter, err := gogit.New(*repoRoot)
 	if err != nil {
 		logrus.WithError(err).WithField("repo", *repoRoot).Fatalf("Unable to prepare a Gitter")
 	}
 
 	// Get a list of changed files from the Gitter:
-	changedFiles, err := gitter.Diff(*compareCommit)
+	changedFiles, err := gitter.Diff(*compareBranch)
 	if err != nil {
-		logrus.WithError(err).WithField("repo", *repoRoot).WithField("diff", *compareCommit).Fatalf("Unable to list changed files")
+		logrus.WithError(err).WithField("repo", *repoRoot).WithField("diff", *compareBranch).Fatalf("Unable to list changed files")
 	}
 
 	// Prepare a package analyser:

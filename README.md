@@ -67,7 +67,7 @@ Usage of go-mono:
   -debug
     	Run in debug mode?
   -diff string
-    	Name of the branch / tag / commit to compare to (default "main")
+    	Name of the branch to compare to (default "main")
   -package string
     	Path to the package to analyse (relative to the repo) (default ".")
   -repo string
@@ -80,14 +80,11 @@ Usage of go-mono:
 How it works
 ------------
 
-- Gets a list of files that have changed
-    - From the main branch
-    - From the previous commit
-    - From a named branch / commit / tag
-- For a given list of files / directories (these are the buildable binaries provided by CLI)
-    - Analyse their dependency trees
-    - Figure out if any of the dependencies are affected by the files in the list of changes
-    - Returns a list of "main" packages that need to be built
+- Gets a list of files that have changed from a named branch
+- For the Go package in the specified path
+    - Analyse the dependency trees
+    - Figure out if any of the local dependencies (imported from the same monorepo) are affected by the files in the list of changes
+    - Returns a non-zero code if any of the dependencies have changed
 
 
 Installation
