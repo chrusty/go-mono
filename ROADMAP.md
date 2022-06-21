@@ -20,7 +20,7 @@ v0.2
 
 - [x] Remame the "packages" package to "analyser"
 - [x] Bring comparison logic into the analyser
-- [ ] Stop shelling out to GIT, and implement a Gitter using a GIT library
+- [x] Stop shelling out to GIT, and implement a Gitter using a GIT library
 
 
 Backlog
