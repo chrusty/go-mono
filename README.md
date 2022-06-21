@@ -27,7 +27,7 @@ A couple of examples.
 - It lists the single dependency that has changed
 
 ```
-go-mono
+# go-mono
 WARN Import has changed                            package=github.com/chrusty/go-mono/internal/git/shell
 ```
 
@@ -41,9 +41,20 @@ WARN Import has changed                            package=github.com/chrusty/go
 - It lists the two dependencies which have changed
 
 ```
-go-mono -diff=master -repo=./go/src/github.com/chrusty/protoc-gen-jsonschema -package=cmd/protoc-gen-jsonschema
+# go-mono -diff=master -repo=./go/src/github.com/chrusty/protoc-gen-jsonschema -package=cmd/protoc-gen-jsonschema
 WARN Import has changed                            package=github.com/chrusty/protoc-gen-jsonschema/internal/converter
 WARN Import has changed                            package=github.com/chrusty/protoc-gen-jsonschema/internal/protos
+```
+
+
+### Example 3
+
+- Nothing has changed
+
+```
+# go-mono
+INFO No changes detected
+
 ```
 
 

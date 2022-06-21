@@ -79,4 +79,7 @@ func main() {
 	if changesDetected {
 		os.Exit(1)
 	}
+
+	// If we made it this far then we're clean:
+	logrus.Info("No changes detected")
 }
