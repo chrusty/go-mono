@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/chrusty/go-mono/internal/analyser/build"
-	"github.com/chrusty/go-mono/internal/git/shell"
+	gogit "github.com/chrusty/go-mono/internal/git/go-git"
 	"github.com/sirupsen/logrus"
 )
 
@@ -49,7 +49,7 @@ func init() {
 func main() {
 
 	// Get a Gitter:
-	gitter, err := shell.New(*repoRoot)
+	gitter, err := gogit.New(*repoRoot)
 	if err != nil {
 		logrus.WithError(err).WithField("repo", *repoRoot).Fatalf("Unable to prepare a Gitter")
 	}
