@@ -79,9 +79,11 @@ func (g *Gitter) Diff(commit string) ([]string, error) {
 		return nil, fmt.Errorf("Unable to calculate patch between commit and head: %w", err)
 	}
 
+	// Add the changes to our list:
 	for _, filePatch := range patch.FilePatches() {
-		fromFile, toFile := filePatch.Files()
-		logrus.Infof("Found diff file: %s -> %s", fromFile.Path(), toFile.Path())
+		fromFile, _ := filePatch.Files()
+		logrus.WithField("filename", fromFile.Path()).Debug("Changed file detected")
+		changedFiles = append(changedFiles, fromFile.Path())
 	}
 
 	return changedFiles, nil
