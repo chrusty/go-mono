@@ -58,25 +58,25 @@ func New(repoRootDirectory string) (*Gitter, error) {
 }
 
 // Get a list of files which differ from the given commit/tag/branch:
-func (g *Gitter) Diff(commit string) ([]string, error) {
+func (g *Gitter) Diff(compareBranch string) ([]string, error) {
 	var changedFiles = []string{}
 
-	// Look up the reference for our commit branch:
-	commitReference, err := g.repo.Reference(plumbing.NewBranchReferenceName(commit), false)
+	// Look up the reference for our comparison branch:
+	compareBranchReference, err := g.repo.Reference(plumbing.NewBranchReferenceName(compareBranch), false)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to retieve the commit reference: %w", err)
+		return nil, fmt.Errorf("Unable to retieve the branch commit reference: %w", err)
 	}
 
 	// Get the source commit (so we can diff against it later):
-	commitObject, err := g.repo.CommitObject(commitReference.Hash())
+	compareBranchObject, err := g.repo.CommitObject(compareBranchReference.Hash())
 	if err != nil {
-		return nil, fmt.Errorf("Unable to retieve the commit: %w", err)
+		return nil, fmt.Errorf("Unable to retieve the branch commit: %w", err)
 	}
 
 	// Calculate the patch (diff) between the source and target commits:
-	patch, err := g.headCommit.Patch(commitObject)
+	patch, err := g.headCommit.Patch(compareBranchObject)
 	if err != nil {
-		return nil, fmt.Errorf("Unable to calculate patch between commit and head: %w", err)
+		return nil, fmt.Errorf("Unable to calculate patch between branch and head: %w", err)
 	}
 
 	// Add the changes to our list:
